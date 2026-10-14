@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "tinicrud-desktop",
+  "version": "1.0.0",
+  "description": "Aplikasi Desktop CRUD Sederhana menggunakan TiniJS dan Electron.",
+  "author": "Antigravity",
+  "homepage": "https://tinijs.dev",
+  "license": "MIT",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "tini dev",
+    "build": "tini build",
+    "preview": "tini preview",
+    "desktop": "npm run build && electron .",
+    "desktop:dev": "concurrently -k -s first \"npm run dev\" \"cross-env VITE_DEV_SERVER_URL=http://localhost:3000 electron .\"",
+    "start": "npm run desktop"
+  },
+  "dependencies": {
+    "@tinijs/core": "^0.21.0",
+    "@tinijs/project": "^0.21.0",
+    "lit": "^3.1.4"
+  },
+  "devDependencies": {
+    "@tinijs/cli": "^0.21.0",
+    "@tinijs/vite-builder": "^0.21.0",
+    "changelogen": "^0.5.5",
+    "concurrently": "^10.0.6",
+    "cross-env": "^10.1.0",
+    "electron": "^44.7.2",
+    "gts": "^5.3.0",
+    "typescript": "~5.4.5",
+    "vite": "^5.2.13",
+    "vitest": "^1.6.0"
+  }
+}

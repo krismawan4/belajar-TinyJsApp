@@ -12,13 +12,10 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "dev": "tini dev",
-    "build": "tini build",
-    "preview": "tini preview",
-    "desktop": "npm run build && electron .",
-    "desktop:dev": "concurrently -k -s first \"npm run dev\" \"cross-env VITE_DEV_SERVER_URL=http://localhost:3000 electron .\"",
-    "build:exe": "npm run build && electron-builder --config electron-builder.json",
-    "start": "npm run desktop"
+    "dev": "tinyjs dev",
+    "build": "tinyjs build",
+    "start": "tinyjs dev",
+    "run:exe": ".\\dist\\tinicrud.exe"
   },
   "dependencies": {
     "@tinijs/core": "^0.21.0",

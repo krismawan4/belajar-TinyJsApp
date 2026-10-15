@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TiniCRUD Desktop - Manajemen Produk</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- Header Navbar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1 class="title">TiniCRUD Desktop</h1>
+        <span class="subtitle">Manajemen Inventaris & Produk</span>
+      </div>
+      <span class="platform-badge">⚡ TinyJS (~6 MB)</span>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" id="btn-reset" title="Reset kembali ke sampel data awal">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        <span>Reset Sampel</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btn-export-csv" title="Unduh laporan dalam format CSV">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Export CSV</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btn-export-json" title="Cadangkan seluruh data ke JSON">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        <span>Backup JSON</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btn-import-json" title="Impor data dari berkas JSON">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <span>Impor JSON</span>
+      </button>
+
+      <button class="btn btn-primary" id="btn-add-product" title="Tambah data produk baru (Ctrl+N)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Tambah Produk</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Stats Cards -->
+    <section class="stats-grid" id="stats-section">
+      <div class="card card-blue">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Total Produk</span>
+          <span class="card-value" id="stat-products">0</span>
+          <span class="card-desc">Item terdaftar</span>
+        </div>
+      </div>
+
+      <div class="card card-emerald">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Total Unit Stok</span>
+          <span class="card-value" id="stat-stock">0</span>
+          <span class="card-desc">Kuantitas tersedia di gudang</span>
+        </div>
+      </div>
+
+      <div class="card card-indigo">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Total Nilai Inventaris</span>
+          <span class="card-value" id="stat-value">Rp 0</span>
+          <span class="card-desc">Estimasi nilai aset stok</span>
+        </div>
+      </div>
+
+      <div class="card card-amber">
+        <div class="icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">Perhatian Stok</span>
+          <span class="card-value" id="stat-critical">0</span>
+          <span class="card-desc" id="stat-critical-detail">0 Habis &bull; 0 Menipis</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Panel -->
+    <section class="control-panel">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-input" placeholder="Cari berdasarkan nama produk, SKU, atau kategori...">
+        <button class="btn-clear" id="btn-clear-search" style="display: none;">&times;</button>
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-item">
+          <label for="filter-category">Kategori:</label>
+          <select id="filter-category">
+            <option value="all">Semua Kategori</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label>Status:</label>
+          <div class="status-pills">
+            <button class="pill active" data-status="all">Semua</button>
+            <button class="pill pill-green" data-status="available">Tersedia</button>
+            <button class="pill pill-yellow" data-status="low">Stok Rendah</button>
+            <button class="pill pill-red" data-status="out_of_stock">Habis</button>
+          </div>
+        </div>
+
+        <div class="filter-item sort-item">
+          <label for="sort-select">Urutkan:</label>
+          <select id="sort-select">
+            <option value="createdAt:desc">Terbaru</option>
+            <option value="createdAt:asc">Terlama</option>
+            <option value="name:asc">Nama (A - Z)</option>
+            <option value="name:desc">Nama (Z - A)</option>
+            <option value="price:asc">Harga Terendah</option>
+            <option value="price:desc">Harga Tertinggi</option>
+            <option value="stock:desc">Stok Terbanyak</option>
+            <option value="stock:asc">Stok Tersedikit</option>
+          </select>
+        </div>
+
+        <div class="view-toggle">
+          <button class="toggle-btn active" id="btn-view-table" title="Tampilan Tabel">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <button class="toggle-btn" id="btn-view-grid" title="Tampilan Grid Kartu">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Display Area -->
+    <div id="content-area"></div>
+  </main>
+
+  <!-- Modal Tambah / Edit Produk -->
+  <div class="modal-backdrop" id="product-modal" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="header-icon" id="modal-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h2 id="modal-title">Tambah Produk Baru</h2>
+          <p id="modal-subtitle">Lengkapi formulir data produk di bawah ini</p>
+        </div>
+        <button class="btn-close" id="btn-close-modal">&times;</button>
+      </div>
+
+      <form id="product-form">
+        <input type="hidden" id="form-id">
+        <div class="modal-body">
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="form-sku">Kode SKU / Kode Barang</label>
+              <input type="text" id="form-sku" placeholder="Contoh: ELC-001 (Otomatis jika kosong)">
+              <small class="hint">Biarkan kosong untuk kode otomatis.</small>
+            </div>
+            <div class="form-group">
+              <label for="form-category">Kategori <span class="req">*</span></label>
+              <select id="form-category">
+                <option value="Elektronik">Elektronik</option>
+                <option value="Aksesoris">Aksesoris</option>
+                <option value="Pakaian">Pakaian</option>
+                <option value="Makanan & Minuman">Makanan & Minuman</option>
+                <option value="Peralatan Kantor">Peralatan Kantor</option>
+                <option value="Kesehatan">Kesehatan</option>
+                <option value="Otomotif">Otomotif</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-name">Nama Produk <span class="req">*</span></label>
+            <input type="text" id="form-name" placeholder="Contoh: Laptop ASUS Vivobook 14" required>
+            <span class="error-msg" id="err-name" style="display: none;">Nama produk wajib diisi.</span>
+          </div>
+
+          <div class="grid-3">
+            <div class="form-group">
+              <label for="form-price">Harga Satuan (Rp) <span class="req">*</span></label>
+              <input type="number" id="form-price" min="0" step="1000" placeholder="0" required>
+            </div>
+            <div class="form-group">
+              <label for="form-stock">Jumlah Stok <span class="req">*</span></label>
+              <input type="number" id="form-stock" min="0" step="1" placeholder="0" required>
+            </div>
+            <div class="form-group">
+              <label for="form-unit">Satuan Barang</label>
+              <input type="text" id="form-unit" value="Unit" placeholder="Unit / Pcs / Box / Rim">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-desc">Deskripsi & Catatan Tambahan</label>
+            <textarea id="form-desc" rows="3" placeholder="Keterangan spesifikasi, warna, atau catatan stok..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-cancel" id="btn-cancel-modal">Batal</button>
+          <button type="submit" class="btn btn-save" id="btn-submit-modal">Simpan Produk</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+

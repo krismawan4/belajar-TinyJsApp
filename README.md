@@ -1,35 +1,49 @@
-# TiniCRUD Desktop - Aplikasi Manajemen Produk & Inventaris
+# TiniCRUD Desktop - Aplikasi Manajemen Produk & Inventaris (~6 MB)
 
-Aplikasi desktop CRUD sederhana, cepat, dan modern yang dibangun menggunakan **[TiniJS](https://tinijs.dev/)** (framework Web Components berbasis Lit) dan dikemas sebagai aplikasi desktop native menggunakan **Electron**.
+Aplikasi desktop CRUD sederhana, cepat, dan ultra-ringan yang dibangun menggunakan **[TinyJS](https://tinyjs.app/)** karya Tarwin Stroh-Spijer ([DevClass](https://www.devclass.com/development/2026/10/13/when-you-just-need-to-build-a-tiny-desktop-app-tinyjs/5302508)).
+
+Aplikasi ini menghasilkan biner berekstensi `.exe` mandiri berukuran **hanya ~5.59 MB** (bukan Electron 250 MB) dan menggunakan **RAM hanya ~15 MB**.
 
 ---
 
-## 🚀 Fitur Utama
+## ⚡ Kenapa Ukurannya Hanya ~6 MB?
+
+1. **Bukan Menggunakan Electron**:
+   Aplikasi tidak membundel browser Google Chromium raksasa. Sebagai gantinya, antarmuka dirender langsung menggunakan **WebView2 bawaan Windows**.
+2. **Runtime txiki.js (QuickJS + libuv)**:
+   Backend dijalankan oleh runtime JavaScript ultra-kompak `txiki.js`, bukan Node.js/Bun yang berat.
+3. **Tanpa Perlu Belajar Rust**:
+   Berbeda dengan Tauri yang mengharuskan menulis Rust, di TinyJS seluruh aplikasi ditulis murni dalam **JavaScript, HTML, dan CSS**.
+4. **Komunikasi Socket Lokal**:
+   Frontend dan backend berkomunikasi melalui IPC socket lokal tanpa membuka port web server HTTP.
+
+---
+
+## 🚀 Fitur Aplikasi
 
 - **CRUD Lengkap (Create, Read, Update, Delete)**:
-  - **Create**: Tambah produk baru dengan modal interaktif, validasi input, dan auto-generate SKU.
-  - **Read**: Daftar produk dengan dua mode tampilan (**Tabel Data** dan **Grid Kartu**).
-  - **Update**: Edit data produk langsung melalui form modal dengan auto-populate.
-  - **Delete**: Hapus produk disertai modal konfirmasi pengamanan.
+  - **Create**: Tambah produk baru dengan modal interaktif, validasi formulir, dan penomoran SKU otomatis.
+  - **Read**: Daftar produk dengan dua pilihan tampilan: **Tabel Data** profesional dan **Grid Kartu**.
+  - **Update**: Edit data produk langsung melalui modal dengan data terisi otomatis.
+  - **Delete**: Hapus produk disertai modal konfirmasi pengamanan native.
 - **Dashboard Statistik Inventaris**:
   - Total Produk terdaftar.
   - Total Unit Stok fisik di gudang.
-  - Total Estimasi Nilai Inventaris (format mata uang Rupiah `Rp`).
+  - Total Estimasi Nilai Inventaris (format Rupiah `Rp`).
   - Peringatan stok kritis (Stok Habis & Stok Rendah ≤ 10 unit).
-- **Pencarian & Penyaringan Real-Time**:
+- **Pencarian, Filter & Pengurutan Real-Time**:
   - Pencarian fleksibel berdasarkan Nama Produk, SKU, atau Kategori.
   - Filter Kategori (Elektronik, Pakaian, Makanan & Minuman, Peralatan Kantor, Aksesoris, dll).
   - Filter Status ketersediaan (Semua, Tersedia, Stok Rendah, Habis).
   - Pengurutan dinamis (Terbaru, Terlama, Nama A-Z, Harga Terendah/Tertinggi, Stok).
 - **Manajemen Berkas & Portabilitas Data**:
-  - **Export CSV**: Unduh laporan inventaris dalam format CSV untuk Microsoft Excel.
-  - **Backup JSON**: Cadangkan seluruh data produk ke berkas JSON.
-  - **Import JSON**: Pulihkan atau impor data inventaris dari berkas JSON.
-  - **Reset Data**: Kembalikan data ke sampel realistis awal kapan saja.
-- **Dukungan Native Desktop & Web**:
-  - Menggunakan Electron IPC & penyimpanan lokal berkas komputer (`products.json`).
-  - Fallback otomatis ke `localStorage` saat dijalankan di browser web.
-  - Keyboard Shortcut: Tekan <kbd>Ctrl</kbd> + <kbd>N</kbd> untuk membuka form tambah produk baru, dan <kbd>Esc</kbd> untuk menutup modal.
+  - **Penyimpanan Lokal Fisik**: Data tersimpan otomatis di berkas lokal `products.json`.
+  - **Export CSV**: Menggunakan native dialog Windows untuk menyimpan berkas CSV.
+  - **Backup & Import JSON**: Ekspor cadangan dan impor data kembali dari berkas JSON.
+  - **Reset Sampel Data**: Tombol untuk mengembalikan data ke contoh sampel realistis.
+- **Pintasan Keyboard**:
+  - <kbd>Ctrl</kbd> + <kbd>N</kbd>: Membuka formulir tambah produk baru.
+  - <kbd>Esc</kbd>: Menutup modal.
 
 ---
 
@@ -37,84 +51,57 @@ Aplikasi desktop CRUD sederhana, cepat, dan modern yang dibangun menggunakan **[
 
 ```text
 TiniJsApp/
-├── app/
-│   ├── assets/              # Logo dan favicon
-│   ├── components/          # Web Components TiniJS
-│   │   ├── delete-modal.ts  # Modal konfirmasi hapus data
-│   │   ├── navbar.ts        # Header & tombol aksi (Export, Import, Reset)
-│   │   ├── product-modal.ts # Modal form Tambah & Edit produk
-│   │   ├── stats-card.ts    # Kartu statistik ringkasan inventaris
-│   │   └── toast-notification.ts # Notifikasi toast mengambang
-│   ├── services/
-│   │   └── product.service.ts # Logika bisnis, CRUD, kalkulasi stok & persistensi
-│   ├── types/
-│   │   └── product.ts       # Definisi interface & tipe TypeScript
-│   ├── app.spec.ts          # Pengujian unit otomatis (Vitest)
-│   ├── app.ts               # Root component TiniJS (@App)
-│   └── index.html           # HTML template aplikasi
-├── electron/
-│   ├── main.cjs             # Proses utama Electron & IPC dialogs/file system
-│   └── preload.cjs          # Script jembatan konteks (contextBridge)
-├── package.json
-├── tini.config.ts           # Konfigurasi TiniJS
-├── tsconfig.json            # Konfigurasi TypeScript
-├── vite.config.ts           # Konfigurasi Vite bundler
+├── assets/
+│   └── icon.png             # Ikon aplikasi
+├── dist/
+│   └── tinicrud.exe         # Hasil biner kompilasi (HANYA 5.59 MB!)
+├── src/
+│   ├── backend/
+│   │   └── main.js          # Backend txiki.js (file system, CRUD RPC)
+│   └── frontend/
+│       ├── app.js           # Logika antarmuka, dialog, state & filter
+│       ├── index.html       # Markup antarmuka utama
+│       └── style.css        # Desain responsif modern
+├── types/
+│   ├── tiny.d.ts            # Definisi tipe API TinyJS
+│   └── tjs.d.ts             # Definisi tipe txiki.js
+├── package.json             # Skrip NPM
+├── products.json            # Berkas basis data lokal
+├── tinyjs.json              # Konfigurasi aplikasi TinyJS
 └── README.md
 ```
 
 ---
 
-## 🛠️ Cara Menjalankan
+## 🛠️ Cara Menjalankan & Membangun
 
-### 1. Menjalankan Mode Desktop (Aplikasi Desktop Native)
-Untuk membangun antarmuka dan meluncurkan jendela desktop Electron:
+### 1. Menjalankan Mode Pengembangan
 ```bash
-npm run desktop
+tinyjs dev
 # atau
-npm start
-```
-
-### 2. Menjalankan Mode Desktop Development (Live Reload)
-Untuk pengembangan dengan fitur hot-reload:
-```bash
-npm run desktop:dev
-```
-
-### 3. Menjalankan Mode Web Browser
-Jika ingin menjalankan antarmuka langsung di browser lokal:
-```bash
 npm run dev
 ```
-Buka browser di `http://localhost:3000`.
 
-### 4. Menjalankan Pengujian Unit (Testing)
-Untuk menjalankan tes otomatis CRUD dan filter:
+### 2. Membangun Berkas Executable `.EXE` (Hanya ~5.59 MB!)
 ```bash
-npx vitest run
-```
-
-### 5. Membangun Berkas Web Produksi
-```bash
+tinyjs build
+# atau
 npm run build
 ```
-Hasil build web tersimpan di folder `.output/`.
+Hasil biner executable akan langsung dibuat di **`dist/tinicrud.exe`** (ukuran berkas hanya **5.59 MB**).
 
-### 6. Membangun Aplikasi Biner `.EXE` (Windows Installer & Portable)
-Untuk mengemas seluruh aplikasi menjadi berkas executable `.exe` mandiri untuk Windows:
+### 3. Menjalankan Berkas Biner `.exe`
+Klik dua kali pada berkas `dist\tinicrud.exe` di File Explorer, atau jalankan melalui terminal:
 ```bash
-npm run build:exe
+.\dist\tinicrud.exe
+# atau
+npm run run:exe
 ```
-Hasil kompilasi akan otomatis dibuat di dalam folder `dist/`:
-- **`TiniCRUD Desktop Setup 1.0.0.exe`**: Berkas installer wizard standar Windows (NSIS).
-- **`TiniCRUD Desktop 1.0.0.exe`**: Berkas portable yang dapat langsung dijalankan tanpa instalasi.
 
 ---
 
 ## 🧰 Teknologi
 
-- **[TiniJS](https://tinijs.dev/)** - Meta-framework berbasis Web Components & Lit
-- **[Lit](https://lit.dev/)** - Library komponen reaktif standar web dari Google
-- **[Electron](https://www.electronjs.org/)** - Framework pembuatan aplikasi desktop lintas platform
-- **[Vite](https://vitejs.dev/)** - Bundler frontend ultra-cepat
-- **[TypeScript](https://www.typescriptlang.org/)** - Pengetikan statis untuk keamanan kode
-- **[Vitest](https://vitest.dev/)** - Framework testing modern
+- **[TinyJS](https://tinyjs.app/)** oleh Tarwin Stroh-Spijer
+- **[txiki.js](https://txikijs.org/)** (QuickJS + libuv JavaScript runtime)
+- **Microsoft Edge WebView2** (Windows Native Web Engine)

@@ -5,8 +5,10 @@ node_modules
 # build
 dist
 .output
+.build
 .parcel-cache
 .tini
+products.json
 app/ui
 app/public/tini-content
 app/public/sw.js

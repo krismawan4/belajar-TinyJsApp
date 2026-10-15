@@ -2,10 +2,11 @@
 .DS_Store
 node_modules
 
-# app
+# build
+dist
+.output
 .parcel-cache
 .tini
-.output
 app/ui
 app/public/tini-content
 app/public/sw.js

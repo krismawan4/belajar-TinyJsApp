@@ -93,11 +93,20 @@ Untuk menjalankan tes otomatis CRUD dan filter:
 npx vitest run
 ```
 
-### 5. Membangun Berkas Produksi
+### 5. Membangun Berkas Web Produksi
 ```bash
 npm run build
 ```
 Hasil build web tersimpan di folder `.output/`.
+
+### 6. Membangun Aplikasi Biner `.EXE` (Windows Installer & Portable)
+Untuk mengemas seluruh aplikasi menjadi berkas executable `.exe` mandiri untuk Windows:
+```bash
+npm run build:exe
+```
+Hasil kompilasi akan otomatis dibuat di dalam folder `dist/`:
+- **`TiniCRUD Desktop Setup 1.0.0.exe`**: Berkas installer wizard standar Windows (NSIS).
+- **`TiniCRUD Desktop 1.0.0.exe`**: Berkas portable yang dapat langsung dijalankan tanpa instalasi.
 
 ---
 
